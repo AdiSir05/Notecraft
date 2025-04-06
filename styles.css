@@ -1,0 +1,376 @@
+/* Global Styles */
+:root {
+    --primary-color: #E67E22;
+    --secondary-color: #8B6F4B;
+    --background-color: #FFF8F0;
+    --text-color: #4A4A4A;
+    --button-color: #8B6F4B;
+    --search-border-color: #8B6F4B;
+    --folder-color: #E67E22;
+    --iphone-width: 390px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    width: 100%;
+    max-width: var(--iphone-width);
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+}
+
+.container {
+    width: 100%;
+    padding: 16px;
+    margin: 0 auto;
+}
+
+/* Header Styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    max-width: var(--iphone-width);
+    background-color: var(--background-color);
+    z-index: 1000;
+}
+
+.menu-icon, .profile-icon {
+    font-size: 28px;
+    color: var(--button-color);
+    cursor: pointer;
+    padding: 8px;
+}
+
+/* Home Page Styles */
+.home-content {
+    text-align: center;
+    padding: 80px 20px 20px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+.logo {
+    font-size: 48px;
+    color: var(--primary-color);
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.search-container {
+    position: relative;
+    width: 85%;
+    margin: 0 auto;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 15px 45px 15px 20px;
+    border: 2px solid var(--search-border-color);
+    border-radius: 30px;
+    font-size: 16px;
+    background-color: white;
+    color: var(--text-color);
+}
+
+.search-bar::placeholder {
+    color: #999;
+}
+
+.search-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--search-border-color);
+}
+
+.main-buttons {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 85%;
+}
+
+.main-button {
+    padding: 24px;
+    background-color: var(--button-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 16px;
+    font-size: 20px;
+    width: 100%;
+    font-family: 'Times New Roman', serif;
+    font-weight: 300;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Library Page Styles */
+.library-content {
+    padding-top: 70px;
+}
+
+.library-content h1 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: var(--secondary-color);
+    font-size: 28px;
+}
+
+.folder-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+    padding: 0 16px;
+}
+
+.folder {
+    background-color: var(--folder-color);
+    color: white;
+    padding: 24px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.folder:active {
+    transform: scale(0.95);
+}
+
+/* Song Page Styles */
+.song-content {
+    padding-top: 70px;
+    padding-bottom: 40px;
+}
+
+.song-header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 0 16px;
+}
+
+.song-header h1 {
+    font-size: 28px;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+.song-header h2 {
+    font-size: 20px;
+    color: var(--secondary-color);
+}
+
+.song-section {
+    margin-bottom: 24px;
+    padding: 0 16px;
+}
+
+.song-section h3 {
+    color: var(--secondary-color);
+    margin-bottom: 12px;
+    font-size: 18px;
+}
+
+.chord-line {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.chord {
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.lyric-line {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.lyric-line p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+/* Mobile-specific touch interactions */
+button, 
+.folder,
+.main-button,
+input[type="search"] {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    outline: none;
+}
+
+/* Status bar spacing for iOS */
+@supports (padding-top: env(safe-area-inset-top)) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* Back Button Styles */
+.back-button {
+    position: fixed;
+    bottom: max(20px, env(safe-area-inset-bottom) + 20px);
+    left: 16px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--button-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+    font-family: system-ui;
+    /* Ensure button stays within iPhone width */
+    left: 50%;
+    transform: translateX(calc(-50% - 160px));
+}
+
+.back-button:active {
+    transform: translateX(calc(-50% - 160px)) scale(0.95);
+}
+
+/* Ensure the button stays within iPhone bounds */
+@media screen and (max-width: 390px) {
+    .back-button {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+        bottom: max(16px, env(safe-area-inset-bottom) + 16px);
+        transform: translateX(calc(-50% - 150px));
+    }
+    
+    .back-button:active {
+        transform: translateX(calc(-50% - 150px)) scale(0.95);
+    }
+}
+
+/* Sidebar Menu Styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    width: calc(var(--iphone-width) / 2);
+    height: 100vh;
+    background-color: var(--background-color);
+    z-index: 2000;
+    padding: 60px 12px 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    /* Position at the left edge of iPhone screen */
+    left: calc(50% - var(--iphone-width) / 2);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.sidebar.active {
+    transform: translateX(0);
+}
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: var(--iphone-width);
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu-section {
+    margin-bottom: 20px;
+}
+
+.menu-header {
+    color: var(--secondary-color);
+    font-family: 'Times New Roman', serif;
+    font-size: 18px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.menu-header::after {
+    content: '∨';
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+.menu-header.active::after {
+    transform: rotate(180deg);
+}
+
+.menu-items {
+    display: none;
+    padding-left: 8px;
+}
+
+.menu-items.active {
+    display: block;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.menu-item .folder-icon,
+.menu-item .music-icon {
+    font-size: 16px;
+} 

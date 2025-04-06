@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Notecraft</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="menu-overlay"></div>
+    <div class="sidebar">
+        <div class="menu-section">
+            <div class="menu-header">Library</div>
+            <div class="menu-items">
+                <a href="#" class="menu-item">
+                    <span class="folder-icon">📁</span>
+                    sad
+                </a>
+                <a href="#" class="menu-item">
+                    <span class="folder-icon">❤️</span>
+                    favorites
+                </a>
+                <a href="#" class="menu-item">
+                    <span class="folder-icon">📁</span>
+                    happy
+                </a>
+                <a href="#" class="menu-item">
+                    <span class="folder-icon">📁</span>
+                    night
+                </a>
+                <a href="#" class="menu-item">
+                    <span class="folder-icon">📁</span>
+                    Coldplay
+                </a>
+                <a href="fix-you.html" class="menu-item">
+                    <span class="music-icon">🎵</span>
+                    Fix You
+                </a>
+            </div>
+        </div>
+        <div class="menu-section">
+            <div class="menu-header">Studio</div>
+            <div class="menu-items">
+                <a href="#" class="menu-item">
+                    <span class="folder-icon">📁</span>
+                    Love
+                </a>
+                <a href="#" class="menu-item">
+                    <span class="folder-icon">📁</span>
+                    Rock
+                </a>
+                <a href="#" class="menu-item">
+                    <span class="folder-icon">📁</span>
+                    Random
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="menu-icon">☰</div>
+            <div class="profile-icon">👤</div>
+        </header>
+        
+        <main class="home-content">
+            <h1 class="logo">Notecraft</h1>
+            <div class="search-container">
+                <input type="search" placeholder="Search" class="search-bar">
+                <span class="search-icon">🔍</span>
+            </div>
+            
+            <div class="main-buttons">
+                <a href="library.html" class="main-button">Library</a>
+                <a href="#" class="main-button">Studio</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Menu functionality
+        const menuIcon = document.querySelector('.menu-icon');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.menu-overlay');
+        const menuHeaders = document.querySelectorAll('.menu-header');
+
+        menuIcon.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        menuHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const items = header.nextElementSibling;
+                header.classList.toggle('active');
+                items.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html> 
