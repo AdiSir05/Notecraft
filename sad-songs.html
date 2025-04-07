@@ -5,16 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <title>Library - Notecraft</title>
+    <title>Sad Songs - Notecraft</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="container">
+        <header>
+            <div class="menu-icon">☰</div>
+            <div class="profile-icon">👤</div>
+        </header>
+
+        <main class="song-list-content">
+            <div class="song-header">
+                <h1>Sad Songs</h1>
+                <h2>Collection</h2>
+            </div>
+
+            <div class="song-list">
+                <div class="song-item">
+                    <div class="song-number">1</div>
+                    <div class="song-details">
+                        <h3>Yesterday</h3>
+                        <p class="artist">The Beatles</p>
+                        <span class="last-accessed">Last accessed: 2 days ago</span>
+                    </div>
+                </div>
+
+                <div class="song-item">
+                    <div class="song-number">2</div>
+                    <div class="song-details">
+                        <h3>Nothing Compares 2 U</h3>
+                        <p class="artist">Sinéad O'Connor</p>
+                        <span class="last-accessed">Last accessed: 1 week ago</span>
+                    </div>
+                </div>
+
+                <div class="song-item">
+                    <div class="song-number">3</div>
+                    <div class="song-details">
+                        <h3>Hurt</h3>
+                        <p class="artist">Johnny Cash</p>
+                        <span class="last-accessed">Last accessed: 3 days ago</span>
+                    </div>
+                </div>
+
+                <div class="song-item">
+                    <div class="song-number">4</div>
+                    <div class="song-details">
+                        <h3>Mad World</h3>
+                        <p class="artist">Gary Jules</p>
+                        <span class="last-accessed">Last accessed: 5 days ago</span>
+                    </div>
+                </div>
+
+                <div class="song-item">
+                    <div class="song-number">5</div>
+                    <div class="song-details">
+                        <h3>The Sound of Silence</h3>
+                        <p class="artist">Simon & Garfunkel</p>
+                        <span class="last-accessed">Last accessed: 2 weeks ago</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <a href="library.html" class="back-button">&lt;</a>
+    </div>
+
     <div class="menu-overlay"></div>
     <div class="sidebar">
         <div class="menu-section">
             <div class="menu-header">Library</div>
             <div class="menu-items">
-                <a href="#" class="menu-item">
+                <a href="sad-songs.html" class="menu-item">
                     <span class="folder-icon">📁</span>
                     sad
                 </a>
@@ -30,16 +93,14 @@
                     <span class="folder-icon">📁</span>
                     night
                 </a>
-                <a href="#" class="menu-item has-submenu">
+                <a href="#" class="menu-item">
                     <span class="folder-icon">📁</span>
                     Coldplay
                 </a>
-                <div class="submenu-items">
-                    <a href="fix-you.html" class="menu-item">
-                        <span class="music-icon">🎵</span>
-                        Fix You
-                    </a>
-                </div>
+                <a href="fix-you.html" class="menu-item">
+                    <span class="music-icon">🎵</span>
+                    Fix You
+                </a>
             </div>
         </div>
         <div class="menu-section">
@@ -59,44 +120,6 @@
                 </a>
             </div>
         </div>
-    </div>
-
-    <div class="container">
-        <header>
-            <div class="menu-icon">☰</div>
-            <div class="profile-icon">👤</div>
-        </header>
-
-        <main class="library-content">
-            <h1>Library</h1>
-            <div class="search-container">
-                <input type="search" placeholder="Search" class="search-bar">
-                <span class="search-icon">🔍</span>
-            </div>
-
-            <div class="folder-grid">
-                <a href="sad-songs.html" class="folder-item">
-                    <div class="folder sad">sad</div>
-                </a>
-                <a href="#" class="folder-item">
-                    <div class="folder happy">happy</div>
-                </a>
-                <a href="#" class="folder-item">
-                    <div class="folder emo">emo</div>
-                </a>
-                <a href="#" class="folder-item">
-                    <div class="folder night">night</div>
-                </a>
-                <a href="#" class="folder-item">
-                    <div class="folder morn">morn</div>
-                </a>
-                <a href="#" class="folder-item">
-                    <div class="folder lofi">lofi</div>
-                </a>
-            </div>
-        </main>
-
-        <a href="index.html" class="back-button">&lt;</a>
     </div>
 
     <script>

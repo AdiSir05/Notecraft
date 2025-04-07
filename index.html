@@ -17,7 +17,7 @@
         <div class="menu-section">
             <div class="menu-header">Library</div>
             <div class="menu-items">
-                <a href="#" class="menu-item">
+                <a href="sad-songs.html" class="menu-item">
                     <span class="folder-icon">📁</span>
                     sad
                 </a>
@@ -37,10 +37,12 @@
                     <span class="folder-icon">📁</span>
                     Coldplay
                 </a>
-                <a href="fix-you.html" class="menu-item">
-                    <span class="music-icon">🎵</span>
-                    Fix You
-                </a>
+                <div class="submenu-items">
+                    <a href="fix-you.html" class="menu-item">
+                        <span class="music-icon">🎵</span>
+                        Fix You
+                    </a>
+                </div>
             </div>
         </div>
         <div class="menu-section">
@@ -88,6 +90,7 @@
         const sidebar = document.querySelector('.sidebar');
         const overlay = document.querySelector('.menu-overlay');
         const menuHeaders = document.querySelectorAll('.menu-header');
+        const submenuItems = document.querySelectorAll('.menu-item.has-submenu');
 
         menuIcon.addEventListener('click', () => {
             sidebar.classList.add('active');
@@ -104,6 +107,17 @@
                 const items = header.nextElementSibling;
                 header.classList.toggle('active');
                 items.classList.toggle('active');
+            });
+        });
+
+        submenuItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (e.target === item) {
+                    e.preventDefault();
+                    item.classList.toggle('active');
+                    const submenu = item.nextElementSibling;
+                    submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+                }
             });
         });
     </script>
