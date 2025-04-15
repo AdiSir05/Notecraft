@@ -10,6 +10,7 @@ import LibraryPage from "./pages/LibraryPage";
 import StudioPage from "./pages/StudioPage";
 import SongPage from "./pages/SongPage";
 import FolderPage from "./pages/FolderPage";
+import FoldersPage from "./pages/FoldersPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
 
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<Navigate to="/" replace />} />
             <Route path="/library" element={<LibraryPage />} />
+            <Route path="/folders" element={<FoldersPage />} />
             <Route path="/studio" element={<StudioPage />} />
             <Route path="/song/:id" element={<SongPage />} />
             <Route path="/folder/:id" element={<FolderPage />} />

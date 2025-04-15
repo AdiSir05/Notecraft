@@ -1,8 +1,8 @@
-
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { Song, Folder, SongSection, SongLine, Chord } from "@/types";
 import { sampleSongs, sampleFolders } from "@/lib/sample-data";
 import { v4 as uuidv4 } from 'uuid';
+import { toast } from "sonner";
 
 interface SongContextType {
   songs: Song[];
@@ -15,23 +15,55 @@ interface SongContextType {
   searchSongs: (query: string) => Song[];
   getFolderSongs: (folderId: string) => Song[];
   createFolder: (name: string, type: 'library' | 'studio') => Folder;
+  deleteFolder: (folderId: string) => void;
   getSongsByType: (type: 'library' | 'studio') => Song[];
   addSectionToSong: (songId: string) => void;
+  removeSectionFromSong: (songId: string, sectionId: string) => void;
+  updateSectionName: (songId: string, sectionId: string, name: string) => void;
   addLineToSection: (songId: string, sectionId: string) => void;
+  removeLineFromSection: (songId: string, sectionId: string, lineId: string) => void;
   updateLyrics: (songId: string, sectionId: string, lineId: string, lyrics: string) => void;
   addChordToLine: (songId: string, sectionId: string, lineId: string, chordName: string, position: number) => void;
   updateChord: (songId: string, sectionId: string, lineId: string, chordId: string, chordName: string) => void;
   removeChord: (songId: string, sectionId: string, lineId: string, chordId: string) => void;
+  transposeSong: (songId: string, semitones: number) => void;
+  favoriteFolders: string[];
+  toggleFavoriteFolder: (folderId: string) => void;
 }
 
 const SongContext = createContext<SongContextType | undefined>(undefined);
+
+const transposeChord = (chordName: string, semitones: number): string => {
+  const chordPattern = /^([A-G][#b]?)(.*)$/;
+  const match = chordName.match(chordPattern);
+  
+  if (!match) return chordName; // Not a valid chord name
+  
+  const rootNote = match[1];
+  const chordType = match[2];
+  
+  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  
+  const normalizedRoot = rootNote
+    .replace('Bb', 'A#')
+    .replace('Db', 'C#')
+    .replace('Eb', 'D#')
+    .replace('Gb', 'F#')
+    .replace('Ab', 'G#');
+  
+  const noteIndex = notes.indexOf(normalizedRoot);
+  if (noteIndex === -1) return chordName; // Not found in our notes array
+  
+  const newIndex = (noteIndex + semitones + 12) % 12;
+  return notes[newIndex] + chordType;
+};
 
 export const SongProvider = ({ children }: { children: ReactNode }) => {
   const [songs, setSongs] = useState<Song[]>(sampleSongs);
   const [folders, setFolders] = useState<Folder[]>(sampleFolders);
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
+  const [favoriteFolders, setFavoriteFolders] = useState<string[]>([]);
 
-  // Load from localStorage if available
   useEffect(() => {
     const savedSongs = localStorage.getItem('songs');
     const savedFolders = localStorage.getItem('folders');
@@ -45,7 +77,6 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Save to localStorage on changes
   useEffect(() => {
     localStorage.setItem('songs', JSON.stringify(songs));
   }, [songs]);
@@ -53,6 +84,17 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     localStorage.setItem('folders', JSON.stringify(folders));
   }, [folders]);
+
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem('favoriteFolders');
+    if (savedFavorites) {
+      setFavoriteFolders(JSON.parse(savedFavorites));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('favoriteFolders', JSON.stringify(favoriteFolders));
+  }, [favoriteFolders]);
 
   const createSong = (title: string, artist?: string, folderId?: string): Song => {
     const newSong: Song = {
@@ -78,7 +120,6 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
 
     setSongs([...songs, newSong]);
 
-    // If folderId is provided, add song to folder
     if (folderId) {
       const updatedFolders = folders.map(folder => {
         if (folder.id === folderId) {
@@ -104,7 +145,6 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
   const deleteSong = (songId: string) => {
     setSongs(songs.filter(song => song.id !== songId));
     
-    // Remove song from any folders
     const updatedFolders = folders.map(folder => ({
       ...folder,
       songs: folder.songs.filter(id => id !== songId)
@@ -113,7 +153,7 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const searchSongs = (query: string): Song[] => {
-    if (!query) return songs;
+    if (!query) return [];
     
     const lowerQuery = query.toLowerCase();
     return songs.filter(song => 
@@ -139,6 +179,10 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
     
     setFolders([...folders, newFolder]);
     return newFolder;
+  };
+
+  const deleteFolder = (folderId: string) => {
+    setFolders(folders.filter(folder => folder.id !== folderId));
   };
 
   const getSongsByType = (type: 'library' | 'studio'): Song[] => {
@@ -180,6 +224,37 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
+  const removeSectionFromSong = (songId: string, sectionId: string) => {
+    setSongs(songs.map(song => {
+      if (song.id === songId) {
+        return {
+          ...song,
+          sections: song.sections.filter(section => section.id !== sectionId),
+          lastEdited: new Date()
+        };
+      }
+      return song;
+    }));
+  };
+
+  const updateSectionName = (songId: string, sectionId: string, name: string) => {
+    setSongs(songs.map(song => {
+      if (song.id === songId) {
+        return {
+          ...song,
+          sections: song.sections.map(section => {
+            if (section.id === sectionId) {
+              return { ...section, name };
+            }
+            return section;
+          }),
+          lastEdited: new Date()
+        };
+      }
+      return song;
+    }));
+  };
+
   const addLineToSection = (songId: string, sectionId: string) => {
     setSongs(songs.map(song => {
       if (song.id === songId) {
@@ -196,6 +271,27 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
               return {
                 ...section,
                 lines: [...section.lines, newLine]
+              };
+            }
+            return section;
+          }),
+          lastEdited: new Date()
+        };
+      }
+      return song;
+    }));
+  };
+
+  const removeLineFromSection = (songId: string, sectionId: string, lineId: string) => {
+    setSongs(songs.map(song => {
+      if (song.id === songId) {
+        return {
+          ...song,
+          sections: song.sections.map(section => {
+            if (section.id === sectionId) {
+              return {
+                ...section,
+                lines: section.lines.filter(line => line.id !== lineId)
               };
             }
             return section;
@@ -331,6 +427,46 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
+  const transposeSong = (songId: string, semitones: number) => {
+    setSongs(songs.map(song => {
+      if (song.id === songId) {
+        return {
+          ...song,
+          sections: song.sections.map(section => {
+            return {
+              ...section,
+              lines: section.lines.map(line => {
+                return {
+                  ...line,
+                  chords: line.chords.map(chord => {
+                    return {
+                      ...chord,
+                      name: transposeChord(chord.name, semitones)
+                    };
+                  })
+                };
+              })
+            };
+          }),
+          lastEdited: new Date()
+        };
+      }
+      return song;
+    }));
+  };
+
+  const toggleFavoriteFolder = (folderId: string) => {
+    if (favoriteFolders.includes(folderId)) {
+      setFavoriteFolders(favoriteFolders.filter(id => id !== folderId));
+    } else {
+      if (favoriteFolders.length >= 4) {
+        toast.error("You can only favorite up to 4 folders");
+        return;
+      }
+      setFavoriteFolders([...favoriteFolders, folderId]);
+    }
+  };
+
   return (
     <SongContext.Provider value={{
       songs,
@@ -343,13 +479,20 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
       searchSongs,
       getFolderSongs,
       createFolder,
+      deleteFolder,
       getSongsByType,
       addSectionToSong,
+      removeSectionFromSong,
+      updateSectionName,
       addLineToSection,
+      removeLineFromSection,
       updateLyrics,
       addChordToLine,
       updateChord,
-      removeChord
+      removeChord,
+      transposeSong,
+      favoriteFolders,
+      toggleFavoriteFolder,
     }}>
       {children}
     </SongContext.Provider>

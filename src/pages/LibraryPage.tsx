@@ -1,15 +1,17 @@
+
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { PlusCircle, Search } from "lucide-react";
 import { useSongContext } from "@/contexts/SongContext";
-import { Header } from "@/components/layout/Header";
-import { MenuSidebar } from "@/components/layout/MenuSidebar";
 import { SongCard } from "@/components/songs/SongCard";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
+import { AppWrapper } from "@/components/common/AppWrapper";
 
 export const LibraryPage = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const { getSongsByType } = useSongContext();
+  const { getSongsByType, createSong } = useSongContext();
+  const navigate = useNavigate();
   
   const librarySongs = getSongsByType('library');
   
@@ -19,16 +21,15 @@ export const LibraryPage = () => {
         (song.artist && song.artist.toLowerCase().includes(searchQuery.toLowerCase()))
       )
     : librarySongs;
+  
+  const handleCreateSong = () => {
+    const newSong = createSong("New Song");
+    navigate(`/song/${newSong.id}`);
+  };
 
   return (
-    <div className="min-h-screen flex flex-col bg-notecraft-light">
-      <Header 
-        title="Library" 
-        toggleMenu={() => setMenuOpen(!menuOpen)} 
-      />
-      <MenuSidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
-      
-      <main className="flex-1 container mx-auto px-4 py-6 max-w-md">
+    <AppWrapper title="Library">
+      <main className="flex-1 px-4 py-6">
         <div className="relative mb-6">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-notecraft-brown/60 h-4 w-4" />
           <Input
@@ -40,7 +41,7 @@ export const LibraryPage = () => {
           />
         </div>
         
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-4 mb-6">
           {filteredSongs.length > 0 ? (
             filteredSongs.map(song => (
               <SongCard key={song.id} song={song} />
@@ -51,8 +52,18 @@ export const LibraryPage = () => {
             </div>
           )}
         </div>
+        
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-notecraft-brown/10 max-w-[390px] mx-auto h-[76px]">
+          <Button
+            onClick={handleCreateSong}
+            className="w-full bg-notecraft-gold hover:bg-notecraft-gold/90 text-white h-[44px]"
+          >
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Create New Song
+          </Button>
+        </div>
       </main>
-    </div>
+    </AppWrapper>
   );
 };
 

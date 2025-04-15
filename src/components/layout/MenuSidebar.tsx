@@ -1,13 +1,9 @@
-import { ChevronRight, Folder, Music, Search } from "lucide-react";
+
+import { Folder, Music, Search } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSongContext } from "@/contexts/SongContext";
 import { cn } from "@/lib/utils";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 
 interface MenuSidebarProps {
   isOpen: boolean;
@@ -18,24 +14,21 @@ export const MenuSidebar = ({ isOpen, onClose }: MenuSidebarProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const { folders, searchSongs } = useSongContext();
   
-  const libraryFolders = folders.filter(folder => folder.type === 'library');
-  const studioFolders = folders.filter(folder => folder.type === 'studio');
-  
   const filteredSongs = searchQuery ? searchSongs(searchQuery) : [];
   
   return (
     <>
       <div 
         className={cn(
-          "fixed inset-0 bg-black/50 transition-opacity z-40",
+          "fixed inset-0 bg-black/50 transition-opacity z-40 max-w-[390px] mx-auto",
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         onClick={onClose}
       />
       <div 
         className={cn(
-          "fixed top-0 left-0 h-full bg-white border-r border-notecraft-brown/20 shadow-lg transition-all duration-300 z-50 max-w-[90vw]",
-          isOpen ? "translate-x-0 w-[280px] sm:w-64" : "-translate-x-full w-[280px] sm:w-64"
+          "fixed top-0 left-0 h-full bg-white border-r border-notecraft-brown/20 shadow-lg transition-all duration-300 z-50 w-[280px] max-w-[390px]",
+          isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="flex flex-col h-full p-4">
@@ -69,65 +62,21 @@ export const MenuSidebar = ({ isOpen, onClose }: MenuSidebarProps) => {
             </div>
           )}
           
-          <Collapsible defaultOpen>
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-notecraft-brown/10 rounded-md">
-              <span className="text-lg font-serif text-notecraft-brown">Library</span>
-              <ChevronRight className="h-4 w-4 transform transition-transform data-[state=open]:rotate-90" />
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="ml-4 space-y-1 mt-2">
-                <Link 
-                  to="/library"
-                  className="flex items-center px-2 py-1 hover:bg-notecraft-brown/10 rounded text-notecraft-brown"
+          <div className="space-y-1 mb-4">
+            {folders
+              .filter(folder => folder.type === 'library' || folder.type === 'studio')
+              .map(folder => (
+                <Link
+                  key={folder.id}
+                  to={`/folder/${folder.id}`}
+                  className="flex items-center px-2 py-1.5 hover:bg-notecraft-brown/10 rounded text-notecraft-brown"
                   onClick={onClose}
                 >
-                  <Folder className="inline-block mr-2 h-4 w-4" />
-                  All Songs
+                  <Folder className="mr-2 h-4 w-4" />
+                  <span className="text-sm">{folder.name}</span>
                 </Link>
-                {libraryFolders.map(folder => (
-                  <Link
-                    key={folder.id}
-                    to={`/folder/${folder.id}`}
-                    className="flex items-center px-2 py-1 hover:bg-notecraft-brown/10 rounded text-notecraft-brown"
-                    onClick={onClose}
-                  >
-                    <Folder className="inline-block mr-2 h-4 w-4" />
-                    {folder.name}
-                  </Link>
-                ))}
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
-
-          <Collapsible defaultOpen>
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-notecraft-brown/10 rounded-md mt-4">
-              <span className="text-lg font-serif text-notecraft-brown">Studio</span>
-              <ChevronRight className="h-4 w-4 transform transition-transform data-[state=open]:rotate-90" />
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="ml-4 space-y-1 mt-2">
-                <Link 
-                  to="/studio"
-                  className="flex items-center px-2 py-1 hover:bg-notecraft-brown/10 rounded text-notecraft-brown"
-                  onClick={onClose}
-                >
-                  <Folder className="inline-block mr-2 h-4 w-4" />
-                  All Songs
-                </Link>
-                {studioFolders.map(folder => (
-                  <Link
-                    key={folder.id}
-                    to={`/folder/${folder.id}`}
-                    className="flex items-center px-2 py-1 hover:bg-notecraft-brown/10 rounded text-notecraft-brown"
-                    onClick={onClose}
-                  >
-                    <Folder className="inline-block mr-2 h-4 w-4" />
-                    {folder.name}
-                  </Link>
-                ))}
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
+              ))}
+          </div>
         </div>
       </div>
     </>

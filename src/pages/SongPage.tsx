@@ -1,20 +1,24 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSongContext } from "@/contexts/SongContext";
-import { Header } from "@/components/layout/Header";
-import { MenuSidebar } from "@/components/layout/MenuSidebar";
 import { SongEditor } from "@/components/songs/SongEditor";
+import { SongViewer } from "@/components/songs/SongViewer";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Trash2 } from "lucide-react";
+import { ChevronLeft, Trash2, Eye, Edit, Save, Music } from "lucide-react";
+import { AppWrapper } from "@/components/common/AppWrapper";
 
 export const SongPage = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { songs, deleteSong, setCurrentSong } = useSongContext();
+  const { songs, deleteSong, setCurrentSong, updateSong, transposeSong } = useSongContext();
   
   const song = songs.find(s => s.id === id);
+  
+  const isNewSong = song && song.sections.every(section => 
+    section.lines.every(line => !line.lyrics && line.chords.length === 0)
+  );
+  
+  const [editMode, setEditMode] = useState(isNewSong);
   
   useEffect(() => {
     if (song) {
@@ -32,13 +36,26 @@ export const SongPage = () => {
       navigate(-1);
     }
   };
+
+  const handleTranspose = (semitones: number) => {
+    if (song) {
+      transposeSong(song.id, semitones);
+    }
+  };
+
+  const handleSave = () => {
+    if (song) {
+      updateSong({
+        ...song,
+        lastEdited: new Date()
+      });
+    }
+  };
   
   if (!song) {
     return (
-      <div className="min-h-screen flex flex-col bg-notecraft-light">
-        <Header />
-        
-        <main className="flex-1 container mx-auto px-4 py-6 flex flex-col items-center justify-center">
+      <AppWrapper>
+        <main className="flex-1 px-4 py-6 flex flex-col items-center justify-center">
           <div className="text-center">
             <h2 className="text-xl font-medium text-notecraft-brown mb-4">Song not found</h2>
             <Button onClick={() => navigate(-1)}>
@@ -47,19 +64,13 @@ export const SongPage = () => {
             </Button>
           </div>
         </main>
-      </div>
+      </AppWrapper>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-notecraft-light">
-      <Header 
-        title={song.title}
-        toggleMenu={() => setMenuOpen(!menuOpen)} 
-      />
-      <MenuSidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
-      
-      <main className="flex-1 container mx-auto px-4 py-6 max-w-md">
+    <AppWrapper title={song.title}>
+      <main className="flex-1 px-4 py-6">
         <div className="flex justify-between mb-4">
           <Button
             variant="ghost"
@@ -70,18 +81,70 @@ export const SongPage = () => {
             Back
           </Button>
           
-          <Button
-            variant="ghost"
-            onClick={handleDeleteSong}
-            className="text-destructive"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setEditMode(!editMode)}
+              className="text-notecraft-brown"
+            >
+              {editMode ? <Eye className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
+              {editMode ? "View" : "Edit"}
+            </Button>
+            
+            {editMode && (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={handleSave}
+                  className="text-notecraft-brown"
+                >
+                  <Save className="mr-2 h-4 w-4" />
+                  Save
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={handleDeleteSong}
+                  className="text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+          </div>
         </div>
         
-        <SongEditor song={song} />
+        {editMode && (
+          <div className="mb-4 bg-white p-3 rounded-lg shadow-sm border border-notecraft-brown/10">
+            <div className="flex items-center justify-between">
+              <div className="flex space-x-2">
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  onClick={() => handleTranspose(-1)}
+                  className="h-8 px-2"
+                >
+                  -1
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  onClick={() => handleTranspose(1)}
+                  className="h-8 px-2"
+                >
+                  +1
+                </Button>
+              </div>
+              <div className="flex items-center">
+                <Music className="h-4 w-4 mr-2 text-notecraft-brown/60" />
+                <span className="text-sm text-notecraft-brown/60">Transpose</span>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {editMode ? <SongEditor song={song} /> : <SongViewer song={song} />}
       </main>
-    </div>
+    </AppWrapper>
   );
 };
 

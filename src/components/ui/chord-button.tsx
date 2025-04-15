@@ -15,7 +15,7 @@ const ChordButton = React.forwardRef<HTMLButtonElement, ChordButtonProps>(
         type="button"
         variant={active ? "default" : "outline"}
         className={cn(
-          "h-10 px-4 text-sm font-medium",
+          "h-7 px-2 text-xs font-medium",
           active ? "bg-notecraft-gold text-white" : "border-notecraft-brown/30 text-notecraft-brown hover:bg-notecraft-brown/10",
           className
         )}

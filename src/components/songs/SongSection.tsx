@@ -2,9 +2,10 @@
 import { useState } from "react";
 import { SongSection as SongSectionType } from "@/types";
 import { useSongContext } from "@/contexts/SongContext";
-import { LyricsLine } from "@/components/songs/LyricsLine";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Edit, Check } from "lucide-react";
+import { PlusCircle, Trash2 } from "lucide-react";
+import { LyricsLine } from "@/components/songs/LyricsLine";
 
 interface SongSectionProps {
   songId: string;
@@ -12,76 +13,59 @@ interface SongSectionProps {
 }
 
 export const SongSection = ({ songId, section }: SongSectionProps) => {
-  const { addLineToSection, updateSong } = useSongContext();
-  const [editingName, setEditingName] = useState(false);
+  const { updateSectionName, addLineToSection, removeLineFromSection } = useSongContext();
   const [sectionName, setSectionName] = useState(section.name);
 
-  const handleSaveSectionName = () => {
-    updateSong({
-      id: songId,
-      sections: [{
-        ...section,
-        name: sectionName
-      }]
-    } as any); // Type shortcut for demo purposes
-    setEditingName(false);
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSectionName(e.target.value);
+  };
+
+  const handleNameBlur = () => {
+    updateSectionName(songId, section.id, sectionName);
+  };
+
+  const handleDeleteLine = (lineId: string) => {
+    removeLineFromSection(songId, section.id, lineId);
   };
 
   return (
-    <div className="mb-6">
-      <div className="flex items-center mb-2">
-        {editingName ? (
-          <div className="flex items-center space-x-2">
-            <input
-              type="text"
-              value={sectionName}
-              onChange={(e) => setSectionName(e.target.value)}
-              className="text-sm font-medium px-2 py-1 border border-notecraft-brown/30 rounded focus:outline-none focus:ring-1 focus:ring-notecraft-gold"
-              autoFocus
-            />
-            <Button 
-              size="icon" 
-              variant="ghost" 
-              onClick={handleSaveSectionName}
-              className="h-8 w-8 text-notecraft-brown"
-            >
-              <Check className="h-4 w-4" />
-            </Button>
-          </div>
-        ) : (
-          <>
-            <h3 className="text-sm font-medium text-notecraft-brown">{section.name}</h3>
-            <Button 
-              size="icon" 
-              variant="ghost" 
-              onClick={() => setEditingName(true)}
-              className="h-8 w-8 ml-1 text-notecraft-brown/60 hover:text-notecraft-brown"
-            >
-              <Edit className="h-3 w-3" />
-            </Button>
-          </>
-        )}
-      </div>
+    <div className="bg-white rounded-lg shadow-sm p-4 border border-notecraft-brown/10">
+      <Input
+        value={sectionName}
+        onChange={handleNameChange}
+        onBlur={handleNameBlur}
+        className="font-medium text-notecraft-brown mb-3 border-0 focus-visible:ring-0 focus-visible:ring-offset-0 hover:bg-notecraft-brown/5 transition-colors text-lg"
+      />
       
       <div className="space-y-4">
         {section.lines.map((line) => (
-          <LyricsLine
-            key={line.id}
-            songId={songId}
-            sectionId={section.id}
-            line={line}
-          />
+          <div key={line.id} className="relative pl-6">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => handleDeleteLine(line.id)}
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 h-6 w-6 text-destructive hover:bg-destructive/10 hover:text-destructive"
+            >
+              <Trash2 className="h-3 w-3" />
+            </Button>
+            <LyricsLine 
+              songId={songId} 
+              sectionId={section.id} 
+              line={line} 
+            />
+          </div>
         ))}
-        
-        <Button
-          variant="ghost"
-          onClick={() => addLineToSection(songId, section.id)}
-          className="text-notecraft-brown/60 hover:text-notecraft-brown hover:bg-notecraft-brown/10 flex items-center w-full justify-center"
-        >
-          <PlusCircle className="h-4 w-4 mr-2" />
-          Add Line
-        </Button>
       </div>
+      
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => addLineToSection(songId, section.id)}
+        className="mt-3 text-notecraft-brown/70 hover:text-notecraft-brown hover:bg-notecraft-brown/10"
+      >
+        <PlusCircle className="h-3 w-3 mr-1" />
+        Add Line
+      </Button>
     </div>
   );
 };

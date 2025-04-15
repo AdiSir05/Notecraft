@@ -1,24 +1,15 @@
 
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Header } from "@/components/layout/Header";
-import { MenuSidebar } from "@/components/layout/MenuSidebar";
+import { AppWrapper } from "@/components/common/AppWrapper";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 
 export const ProfilePage = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col bg-notecraft-light">
-      <Header 
-        title="Profile"
-        toggleMenu={() => setMenuOpen(!menuOpen)} 
-      />
-      <MenuSidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
-      
-      <main className="flex-1 container mx-auto px-4 py-6 max-w-md">
+    <AppWrapper title="Profile">
+      <main className="container mx-auto px-4 py-6 max-w-md">
         <div className="flex justify-start mb-6">
           <Button
             variant="ghost"
@@ -57,8 +48,9 @@ export const ProfilePage = () => {
           </div>
         </div>
       </main>
-    </div>
+    </AppWrapper>
   );
 };
 
 export default ProfilePage;
+

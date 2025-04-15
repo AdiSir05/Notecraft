@@ -1,9 +1,7 @@
 
-import { Home, Menu, User } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Menu, Home, User } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { MenuSidebar } from "./MenuSidebar";
 
 interface HeaderProps {
   title?: string;
@@ -11,49 +9,41 @@ interface HeaderProps {
 }
 
 export const Header = ({ title, toggleMenu }: HeaderProps) => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const location = useLocation();
-  const isHomePage = location.pathname === '/';
-
-  const handleMenuToggle = () => {
-    if (toggleMenu) {
-      toggleMenu();
-    } else {
-      setMenuOpen(!menuOpen);
-    }
-  };
-
   return (
-    <>
-      <header className="bg-white py-3 px-4 flex justify-between items-center w-full max-w-screen-sm mx-auto h-14 border-b border-notecraft-brown/20">
-        <div className="flex items-center gap-4">
+    <header className="bg-white py-4 px-4 flex justify-between items-center w-full border-b border-notecraft-brown/10">
+      <div className="flex items-center gap-4">
+        <Button 
+          onClick={toggleMenu} 
+          variant="ghost" 
+          size="icon"
+          className="h-8 w-8 text-notecraft-brown"
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+        <Link to="/">
           <Button 
-            onClick={handleMenuToggle} 
             variant="ghost" 
-            size="icon"
+            size="icon" 
+            className="h-8 w-8 text-notecraft-brown"
           >
-            <Menu className="h-6 w-6 text-notecraft-brown" />
-          </Button>
-          <Link to="/">
-            <Button variant="ghost" size="icon">
-              <Home className="h-6 w-6 text-notecraft-brown" />
-            </Button>
-          </Link>
-          {title ? (
-            <h1 className="text-notecraft-gold font-script text-3xl">{title}</h1>
-          ) : (
-            <Link to="/" className="text-notecraft-gold font-script text-3xl">
-              Notecraft
-            </Link>
-          )}
-        </div>
-        <Link to="/profile">
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <User className="h-6 w-6 text-notecraft-brown" />
+            <Home className="h-5 w-5" />
           </Button>
         </Link>
-      </header>
-      {!toggleMenu && <MenuSidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)} />}
-    </>
+        {title && (
+          <h1 className="text-notecraft-gold font-script text-3xl font-bold tracking-wide">
+            {title}
+          </h1>
+        )}
+      </div>
+      <Link to="/profile">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="h-8 w-8 text-notecraft-brown rounded-full"
+        >
+          <User className="h-5 w-5" />
+        </Button>
+      </Link>
+    </header>
   );
 };
