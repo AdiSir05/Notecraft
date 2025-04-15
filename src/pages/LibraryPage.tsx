@@ -1,19 +1,15 @@
-
 import { useState } from "react";
-import { PlusCircle, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useSongContext } from "@/contexts/SongContext";
 import { Header } from "@/components/layout/Header";
 import { MenuSidebar } from "@/components/layout/MenuSidebar";
 import { SongCard } from "@/components/songs/SongCard";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
 
 export const LibraryPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const { getSongsByType, createSong, createFolder } = useSongContext();
-  const navigate = useNavigate();
+  const { getSongsByType } = useSongContext();
   
   const librarySongs = getSongsByType('library');
   
@@ -23,11 +19,6 @@ export const LibraryPage = () => {
         (song.artist && song.artist.toLowerCase().includes(searchQuery.toLowerCase()))
       )
     : librarySongs;
-  
-  const handleCreateSong = () => {
-    const newSong = createSong("New Song");
-    navigate(`/song/${newSong.id}`);
-  };
 
   return (
     <div className="min-h-screen flex flex-col bg-notecraft-light">
@@ -49,7 +40,7 @@ export const LibraryPage = () => {
           />
         </div>
         
-        <div className="grid grid-cols-1 gap-4 mb-6">
+        <div className="grid grid-cols-1 gap-4">
           {filteredSongs.length > 0 ? (
             filteredSongs.map(song => (
               <SongCard key={song.id} song={song} />
@@ -60,14 +51,6 @@ export const LibraryPage = () => {
             </div>
           )}
         </div>
-        
-        <Button
-          onClick={handleCreateSong}
-          className="w-full bg-notecraft-gold hover:bg-notecraft-gold/90 text-white"
-        >
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Create New Song
-        </Button>
       </main>
     </div>
   );
