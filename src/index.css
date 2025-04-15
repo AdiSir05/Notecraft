@@ -1,0 +1,126 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 36 33% 97%;
+    --foreground: 32 33% 15%;
+
+    --card: 33 36% 31%;
+    --card-foreground: 36 33% 97%;
+
+    --popover: 36 33% 97%;
+    --popover-foreground: 32 33% 15%;
+
+    --primary: 33 36% 31%;
+    --primary-foreground: 36 33% 97%;
+
+    --secondary: 34 36% 25%;
+    --secondary-foreground: 36 33% 97%;
+
+    --muted: 33 25% 90%;
+    --muted-foreground: 32 15% 40%;
+
+    --accent: 35 67% 55%;
+    --accent-foreground: 36 33% 97%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 33 25% 85%;
+    --input: 33 25% 85%;
+    --ring: 35 67% 55%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 33 36% 31%;
+    --sidebar-foreground: 36 33% 97%;
+    --sidebar-primary: 35 67% 55%;
+    --sidebar-primary-foreground: 36 33% 97%;
+    --sidebar-accent: 33 20% 25%;
+    --sidebar-accent-foreground: 36 33% 97%;
+    --sidebar-border: 33 20% 25%;
+    --sidebar-ring: 35 67% 55%;
+  }
+
+  .dark {
+    --background: 33 25% 15%;
+    --foreground: 36 33% 97%;
+
+    --card: 33 36% 31%;
+    --card-foreground: 36 33% 97%;
+
+    --popover: 33 25% 15%;
+    --popover-foreground: 36 33% 97%;
+
+    --primary: 35 67% 55%;
+    --primary-foreground: 33 25% 15%;
+
+    --secondary: 33 36% 31%;
+    --secondary-foreground: 36 33% 97%;
+
+    --muted: 33 20% 25%;
+    --muted-foreground: 36 20% 80%;
+
+    --accent: 35 67% 55%;
+    --accent-foreground: 36 33% 97%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 36 33% 97%;
+
+    --border: 33 20% 25%;
+    --input: 33 20% 25%;
+    --ring: 35 67% 55%;
+    
+    --sidebar-background: 33 36% 31%;
+    --sidebar-foreground: 36 33% 97%;
+    --sidebar-primary: 35 67% 55%;
+    --sidebar-primary-foreground: 36 33% 97%;
+    --sidebar-accent: 33 20% 25%;
+    --sidebar-accent-foreground: 36 33% 97%;
+    --sidebar-border: 33 20% 25%;
+    --sidebar-ring: 35 67% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Custom chord styling for the app */
+.chord {
+  @apply text-notecraft-gold font-medium;
+}
+
+/* Fix iOS button styling */
+button {
+  -webkit-appearance: none;
+}
+
+/* Custom spacing for song lyrics */
+.lyrics-line {
+  @apply relative min-h-10 leading-relaxed;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .chord-position {
+    left: var(--position-percent);
+  }
+}
+
+/* Touch optimization */
+@media (hover: none) {
+  .touch-target {
+    @apply min-h-12 min-w-12;
+  }
+}
