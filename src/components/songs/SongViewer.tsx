@@ -1,4 +1,3 @@
-
 import { Song } from "@/types";
 
 interface SongViewerProps {
