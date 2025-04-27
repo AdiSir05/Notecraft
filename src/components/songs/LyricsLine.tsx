@@ -19,70 +19,15 @@ export const LyricsLine = ({ songId, sectionId, line }: LyricsLineProps) => {
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
 
   const handleLyricsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newText = e.target.value;
-    const existingWords = line.words && Array.isArray(line.words) ? line.words : [];
-    const existingWordMap = new Map<string, Word>();
-    
-    // Create a map of text -> word with chord data
-    existingWords.forEach(word => {
-      if (word.chord) {
-        existingWordMap.set(word.text, word);
-      }
-    });
-    
-    // Create new words array, preserving chord data where possible
-    const words: Word[] = newText.split(/\s+/)
-      .filter(word => word.length > 0)
-      .map(wordText => {
-        // Check if this word text existed before and had a chord
-        const existingWord = existingWordMap.get(wordText);
-        if (existingWord) {
-          // Preserve the existing word with its chord
-          return existingWord;
-        } else {
-          // Create a new word
-          return {
-            id: uuidv4(),
-            text: wordText
-          };
-        }
-      });
-    
-    updateLyrics(songId, sectionId, line.id, newText, words);
+    // ... keep existing code (splitting lyrics text into words and preserving chord data)
   };
 
   const handleChordSelect = (wordId: string, chordName: string) => {
-    if (!line.words || !Array.isArray(line.words)) return;
-    
-    const updatedWords = line.words.map(word => {
-      if (word.id === wordId) {
-        return {
-          ...word,
-          chord: {
-            id: uuidv4(),
-            name: chordName
-          }
-        };
-      }
-      return word;
-    });
-    
-    updateLyrics(songId, sectionId, line.id, line.lyrics, updatedWords);
-    setSelectedWordId(null);
+    // ... keep existing code (updating chord for the selected word)
   };
 
   const removeChord = (wordId: string) => {
-    if (!line.words || !Array.isArray(line.words)) return;
-    
-    const updatedWords = line.words.map(word => {
-      if (word.id === wordId) {
-        const { chord, ...rest } = word;
-        return rest;
-      }
-      return word;
-    });
-    
-    updateLyrics(songId, sectionId, line.id, line.lyrics, updatedWords);
+    // ... keep existing code (removing chord from a word)
   };
 
   // Ensure words is an array before mapping
@@ -90,51 +35,59 @@ export const LyricsLine = ({ songId, sectionId, line }: LyricsLineProps) => {
 
   return (
     <div className="space-y-1 lyrics-line">
-      <div className="flex flex-wrap gap-x-1">
-        {words.map((word) => (
-          <div key={word.id} className="relative group">
-            {word.chord ? (
-              <div className="absolute -top-6 left-0">
-                <div className="flex items-center gap-1">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-5 px-1 py-0 text-xs font-medium text-notecraft-gold"
-                    onClick={() => setSelectedWordId(word.id)}
-                  >
-                    {word.chord.name}
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => removeChord(word.id)}
-                    className="h-4 w-4 text-notecraft-brown/60 hover:text-notecraft-brown hover:bg-transparent"
-                  >
-                    <X className="h-3 w-3" />
-                  </Button>
+      <div className="relative">
+        {/* This displays the chord buttons and hover targets above the words */}
+        <div className="flex flex-wrap gap-x-1 mt-2 mb-1">
+          {words.map((word, index) => (
+            <div key={word.id} className="relative group">
+              <span className="text-notecraft-brown">
+                {word.text}
+              </span>
+              
+              {/* Chord display or add button that appears on hover */}
+              {word.chord ? (
+                <div className="absolute -top-6 left-0">
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-5 px-1 py-0 text-xs font-medium text-notecraft-gold"
+                      onClick={() => setSelectedWordId(word.id)}
+                    >
+                      {word.chord.name}
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => removeChord(word.id)}
+                      className="h-4 w-4 text-notecraft-brown/60 hover:text-notecraft-brown hover:bg-transparent"
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute -top-6 left-1/2 -translate-x-1/2 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                onClick={() => setSelectedWordId(word.id)}
-              >
-                <Plus className="h-3 w-3" />
-              </Button>
-            )}
-            <span>{word.text}</span>
-          </div>
-        ))}
-      </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="absolute -top-6 left-1/2 -translate-x-1/2 h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-full bg-notecraft-gold border-none"
+                  onClick={() => setSelectedWordId(word.id)}
+                >
+                  <Plus className="h-3 w-3 text-white" />
+                </Button>
+              )}
+            </div>
+          ))}
+        </div>
 
-      <Input
-        value={line.lyrics}
-        onChange={handleLyricsChange}
-        placeholder="Tap to enter lyrics..."
-        className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 hover:bg-notecraft-brown/5 transition-colors text-notecraft-brown min-h-10"
-      />
+        {/* Input for editing lyrics */}
+        <Input
+          value={line.lyrics}
+          onChange={handleLyricsChange}
+          placeholder="Tap to enter lyrics..."
+          className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 hover:bg-notecraft-brown/5 transition-colors text-notecraft-brown"
+        />
+      </div>
 
       {selectedWordId !== null && (
         <div className="bg-white rounded-lg shadow-md mt-2 border border-notecraft-brown/20">

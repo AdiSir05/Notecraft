@@ -1,4 +1,3 @@
-
 import { Menu, Home, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,7 @@ interface HeaderProps {
 
 export const Header = ({ title, toggleMenu }: HeaderProps) => {
   return (
-    <header className="bg-white py-4 px-4 flex justify-between items-center w-full border-b border-notecraft-brown/10">
+    <header className="bg-white py-4 px-4 flex justify-between items-center w-full border-b-2 border-black">
       <div className="flex items-center gap-4">
         <Button 
           onClick={toggleMenu} 
