@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSongContext } from "@/contexts/SongContext";
@@ -15,7 +16,7 @@ export const SongPage = () => {
   const song = songs.find(s => s.id === id);
   
   const isNewSong = song && song.sections.every(section => 
-    section.lines.every(line => !line.lyrics && line.chords.length === 0)
+    section.lines.every(line => !line.lyrics && (!line.words || line.words.length === 0))
   );
   
   const [editMode, setEditMode] = useState(isNewSong);
@@ -45,8 +46,30 @@ export const SongPage = () => {
 
   const handleSave = () => {
     if (song) {
-      updateSong({
+      // Make sure each line has a words array before saving
+      const updatedSong = {
         ...song,
+        sections: song.sections.map(section => ({
+          ...section,
+          lines: section.lines.map(line => {
+            // If words is undefined or empty but lyrics exist, create words from lyrics
+            if ((!line.words || line.words.length === 0) && line.lyrics) {
+              const { v4: uuidv4 } = require('uuid');
+              return {
+                ...line,
+                words: line.lyrics.split(/\s+/).filter(word => word.length > 0).map(text => ({
+                  id: uuidv4(),
+                  text
+                }))
+              };
+            }
+            return line;
+          })
+        }))
+      };
+      
+      updateSong({
+        ...updatedSong,
         lastEdited: new Date()
       });
     }

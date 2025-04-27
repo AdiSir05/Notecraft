@@ -10,25 +10,30 @@ export interface Song {
 
 export interface SongSection {
   id: string;
-  name: string; // e.g., "Intro", "Verse 1", "Chorus"
+  name: string;
   lines: SongLine[];
 }
 
 export interface SongLine {
   id: string;
   lyrics: string;
-  chords: Chord[];
+  words: Word[];
+}
+
+export interface Word {
+  id: string;
+  text: string;
+  chord?: Chord;
 }
 
 export interface Chord {
   id: string;
   name: string; // e.g., "G", "Am", "F#m7"
-  position: number; // Position in the lyric line
 }
 
 export interface Folder {
   id: string;
   name: string;
   type: 'library' | 'studio';
-  songs: string[]; // Array of song IDs
+  songs: string[];
 }

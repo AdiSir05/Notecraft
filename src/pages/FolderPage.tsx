@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { PlusCircle, ChevronLeft, Search, Trash2 } from "lucide-react";
@@ -105,14 +104,14 @@ export const FolderPage = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                  className="absolute right-2 top-2 p-1.5 rounded-full bg-white shadow-sm border border-notecraft-brown/10 z-10 hover:bg-red-50"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     handleDeleteSong(song.id);
                   }}
                 >
-                  <Trash2 className="h-4 w-4 text-notecraft-brown/60 hover:text-red-500" />
+                  <Trash2 className="h-4 w-4 text-red-500" />
                 </Button>
                 <SongCard song={song} />
               </div>

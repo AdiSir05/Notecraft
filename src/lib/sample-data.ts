@@ -1,5 +1,6 @@
 
 import { Folder, Song } from "@/types";
+import { v4 as uuidv4 } from 'uuid';
 
 export const sampleSongs: Song[] = [
   {
@@ -15,12 +16,12 @@ export const sampleSongs: Song[] = [
         lines: [
           {
             id: "l1",
-            lyrics: "",
-            chords: [
-              { id: "c1", name: "F#", position: 0 },
-              { id: "c2", name: "A#m", position: 2 },
-              { id: "c3", name: "D#m7", position: 5 },
-              { id: "c4", name: "G#", position: 8 }
+            lyrics: "F# A#m D#m7 G#",
+            words: [
+              { id: uuidv4(), text: "F#", chord: { id: "c1", name: "F#" } },
+              { id: uuidv4(), text: "A#m", chord: { id: "c2", name: "A#m" } },
+              { id: uuidv4(), text: "D#m7", chord: { id: "c3", name: "D#m7" } },
+              { id: uuidv4(), text: "G#", chord: { id: "c4", name: "G#" } }
             ]
           }
         ]
@@ -32,39 +33,57 @@ export const sampleSongs: Song[] = [
           {
             id: "l2",
             lyrics: "When you try your best but",
-            chords: [
-              { id: "c5", name: "F#", position: 0 }
+            words: [
+              { id: uuidv4(), text: "When", chord: { id: "c5", name: "F#" } },
+              { id: uuidv4(), text: "you" },
+              { id: uuidv4(), text: "try" },
+              { id: uuidv4(), text: "your" },
+              { id: uuidv4(), text: "best" },
+              { id: uuidv4(), text: "but" }
             ]
           },
           {
             id: "l3",
             lyrics: "you don't succeed",
-            chords: [
-              { id: "c6", name: "A#m", position: 0 },
-              { id: "c7", name: "D#m7", position: 8 }
+            words: [
+              { id: uuidv4(), text: "you", chord: { id: "c6", name: "A#m" } },
+              { id: uuidv4(), text: "don't" },
+              { id: uuidv4(), text: "succeed", chord: { id: "c7", name: "D#m7" } }
             ]
           },
           {
             id: "l4",
             lyrics: "When you get what you",
-            chords: [
-              { id: "c8", name: "C#", position: 0 },
-              { id: "c9", name: "F#", position: 10 }
+            words: [
+              { id: uuidv4(), text: "When", chord: { id: "c8", name: "C#" } },
+              { id: uuidv4(), text: "you" },
+              { id: uuidv4(), text: "get" },
+              { id: uuidv4(), text: "what" },
+              { id: uuidv4(), text: "you", chord: { id: "c9", name: "F#" } }
             ]
           },
           {
             id: "l5",
             lyrics: "want but not what you need",
-            chords: [
-              { id: "c10", name: "A#m", position: 0 },
-              { id: "c11", name: "D#m7", position: 12 }
+            words: [
+              { id: uuidv4(), text: "want", chord: { id: "c10", name: "A#m" } },
+              { id: uuidv4(), text: "but" },
+              { id: uuidv4(), text: "not" },
+              { id: uuidv4(), text: "what" },
+              { id: uuidv4(), text: "you" },
+              { id: uuidv4(), text: "need", chord: { id: "c11", name: "D#m7" } }
             ]
           },
           {
             id: "l6",
             lyrics: "When you feel so tired, but",
-            chords: [
-              { id: "c12", name: "F#", position: 0 }
+            words: [
+              { id: uuidv4(), text: "When", chord: { id: "c12", name: "F#" } },
+              { id: uuidv4(), text: "you" },
+              { id: uuidv4(), text: "feel" },
+              { id: uuidv4(), text: "so" },
+              { id: uuidv4(), text: "tired," },
+              { id: uuidv4(), text: "but" }
             ]
           }
         ]
@@ -85,9 +104,13 @@ export const sampleSongs: Song[] = [
           {
             id: "l1",
             lyrics: "Sample lyrics for a happy song",
-            chords: [
-              { id: "c1", name: "C", position: 0 },
-              { id: "c2", name: "G", position: 10 }
+            words: [
+              { id: uuidv4(), text: "Sample", chord: { id: "c1", name: "C" } },
+              { id: uuidv4(), text: "lyrics" },
+              { id: uuidv4(), text: "for" },
+              { id: uuidv4(), text: "a" },
+              { id: uuidv4(), text: "happy", chord: { id: "c2", name: "G" } },
+              { id: uuidv4(), text: "song" }
             ]
           }
         ]
@@ -108,9 +131,13 @@ export const sampleSongs: Song[] = [
           {
             id: "l1",
             lyrics: "Sample lyrics for a sad song",
-            chords: [
-              { id: "c1", name: "Am", position: 0 },
-              { id: "c2", name: "F", position: 10 }
+            words: [
+              { id: uuidv4(), text: "Sample", chord: { id: "c1", name: "Am" } },
+              { id: uuidv4(), text: "lyrics" },
+              { id: uuidv4(), text: "for" },
+              { id: uuidv4(), text: "a" },
+              { id: uuidv4(), text: "sad", chord: { id: "c2", name: "F" } },
+              { id: uuidv4(), text: "song" }
             ]
           }
         ]
@@ -131,9 +158,13 @@ export const sampleSongs: Song[] = [
           {
             id: "l1",
             lyrics: "Sample lyrics for a night song",
-            chords: [
-              { id: "c1", name: "Em", position: 0 },
-              { id: "c2", name: "C", position: 10 }
+            words: [
+              { id: uuidv4(), text: "Sample", chord: { id: "c1", name: "Em" } },
+              { id: uuidv4(), text: "lyrics" },
+              { id: uuidv4(), text: "for" },
+              { id: uuidv4(), text: "a" },
+              { id: uuidv4(), text: "night", chord: { id: "c2", name: "C" } },
+              { id: uuidv4(), text: "song" }
             ]
           }
         ]
@@ -154,9 +185,13 @@ export const sampleSongs: Song[] = [
           {
             id: "l1",
             lyrics: "Sample lyrics for a love song",
-            chords: [
-              { id: "c1", name: "D", position: 0 },
-              { id: "c2", name: "A", position: 10 }
+            words: [
+              { id: uuidv4(), text: "Sample", chord: { id: "c1", name: "D" } },
+              { id: uuidv4(), text: "lyrics" },
+              { id: uuidv4(), text: "for" },
+              { id: uuidv4(), text: "a" },
+              { id: uuidv4(), text: "love", chord: { id: "c2", name: "A" } },
+              { id: uuidv4(), text: "song" }
             ]
           }
         ]
@@ -177,9 +212,13 @@ export const sampleSongs: Song[] = [
           {
             id: "l1",
             lyrics: "Sample lyrics for a rock song",
-            chords: [
-              { id: "c1", name: "E", position: 0 },
-              { id: "c2", name: "A", position: 10 }
+            words: [
+              { id: uuidv4(), text: "Sample", chord: { id: "c1", name: "E" } },
+              { id: uuidv4(), text: "lyrics" },
+              { id: uuidv4(), text: "for" },
+              { id: uuidv4(), text: "a" },
+              { id: uuidv4(), text: "rock", chord: { id: "c2", name: "A" } },
+              { id: uuidv4(), text: "song" }
             ]
           }
         ]

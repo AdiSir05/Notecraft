@@ -1,3 +1,4 @@
+
 import { Song } from "@/types";
 
 interface SongViewerProps {
@@ -21,25 +22,26 @@ export const SongViewer = ({ song }: SongViewerProps) => {
             
             <div className="space-y-6">
               {section.lines.map((line) => (
-                <div key={line.id} className="relative">
-                  {line.chords.length > 0 && (
-                    <div className="absolute -top-4 left-0 flex flex-wrap text-notecraft-gold space-x-2">
-                      {line.chords.map((chord) => (
-                        <span 
-                          key={chord.id}
-                          className="inline-block text-base font-semibold"
-                          style={{ 
-                            left: `${chord.position * 8}px`,
-                            whiteSpace: 'nowrap'
-                          }}
-                        >
-                          {chord.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  <div className="text-notecraft-brown text-lg leading-relaxed tracking-wide pt-5">
-                    {line.lyrics || <span className="text-notecraft-brown/30 italic">...</span>}
+                <div key={line.id} className="relative leading-loose">
+                  <div className="flex flex-wrap gap-x-1">
+                    {line.words && Array.isArray(line.words) ? (
+                      line.words.map((word) => (
+                        <div key={word.id} className="relative inline-flex flex-col items-center">
+                          {word.chord && (
+                            <span className="absolute -top-6 text-notecraft-gold text-base font-semibold whitespace-nowrap">
+                              {word.chord.name}
+                            </span>
+                          )}
+                          <span className="text-notecraft-brown text-lg">
+                            {word.text || <span className="text-notecraft-brown/30 italic">...</span>}
+                          </span>
+                        </div>
+                      ))
+                    ) : (
+                      <span className="text-notecraft-brown text-lg">
+                        {line.lyrics || <span className="text-notecraft-brown/30 italic">No lyrics</span>}
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}

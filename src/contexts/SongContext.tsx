@@ -1,5 +1,6 @@
+
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { Song, Folder, SongSection, SongLine, Chord } from "@/types";
+import { Song, Folder, SongSection, SongLine, Word, Chord } from "@/types";
 import { sampleSongs, sampleFolders } from "@/lib/sample-data";
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from "sonner";
@@ -22,7 +23,7 @@ interface SongContextType {
   updateSectionName: (songId: string, sectionId: string, name: string) => void;
   addLineToSection: (songId: string, sectionId: string) => void;
   removeLineFromSection: (songId: string, sectionId: string, lineId: string) => void;
-  updateLyrics: (songId: string, sectionId: string, lineId: string, lyrics: string) => void;
+  updateLyrics: (songId: string, sectionId: string, lineId: string, lyrics: string, words: Word[]) => void;
   addChordToLine: (songId: string, sectionId: string, lineId: string, chordName: string, position: number) => void;
   updateChord: (songId: string, sectionId: string, lineId: string, chordId: string, chordName: string) => void;
   removeChord: (songId: string, sectionId: string, lineId: string, chordId: string) => void;
@@ -109,7 +110,7 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
             {
               id: uuidv4(),
               lyrics: "",
-              chords: []
+              words: []
             }
           ]
         }
@@ -209,7 +210,7 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
             {
               id: uuidv4(),
               lyrics: "",
-              chords: []
+              words: []
             }
           ]
         };
@@ -265,7 +266,7 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
               const newLine: SongLine = {
                 id: uuidv4(),
                 lyrics: "",
-                chords: []
+                words: []
               };
               
               return {
@@ -303,7 +304,7 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
-  const updateLyrics = (songId: string, sectionId: string, lineId: string, lyrics: string) => {
+  const updateLyrics = (songId: string, sectionId: string, lineId: string, lyrics: string, words: Word[]) => {
     setSongs(songs.map(song => {
       if (song.id === songId) {
         return {
@@ -314,7 +315,14 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
                 ...section,
                 lines: section.lines.map(line => {
                   if (line.id === lineId) {
-                    return { ...line, lyrics };
+                    return { 
+                      ...line, 
+                      lyrics,
+                      words: words || lyrics.split(/\s+/).filter(word => word.length > 0).map(text => ({
+                        id: uuidv4(),
+                        text
+                      }))
+                    };
                   }
                   return line;
                 })
@@ -340,15 +348,21 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
                 ...section,
                 lines: section.lines.map(line => {
                   if (line.id === lineId) {
-                    const newChord: Chord = {
-                      id: uuidv4(),
-                      name: chordName,
-                      position
-                    };
+                    // Find the word at the specified position
+                    const words = [...line.words];
+                    if (words[position]) {
+                      words[position] = {
+                        ...words[position],
+                        chord: {
+                          id: uuidv4(),
+                          name: chordName
+                        }
+                      };
+                    }
                     
                     return {
                       ...line,
-                      chords: [...line.chords, newChord]
+                      words
                     };
                   }
                   return line;
@@ -377,11 +391,17 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
                   if (line.id === lineId) {
                     return {
                       ...line,
-                      chords: line.chords.map(chord => {
-                        if (chord.id === chordId) {
-                          return { ...chord, name: chordName };
+                      words: line.words.map(word => {
+                        if (word.chord && word.chord.id === chordId) {
+                          return { 
+                            ...word, 
+                            chord: { 
+                              ...word.chord, 
+                              name: chordName 
+                            } 
+                          };
                         }
-                        return chord;
+                        return word;
                       })
                     };
                   }
@@ -411,7 +431,13 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
                   if (line.id === lineId) {
                     return {
                       ...line,
-                      chords: line.chords.filter(chord => chord.id !== chordId)
+                      words: line.words.map(word => {
+                        if (word.chord && word.chord.id === chordId) {
+                          const { chord, ...rest } = word;
+                          return rest;
+                        }
+                        return word;
+                      })
                     };
                   }
                   return line;
@@ -438,11 +464,17 @@ export const SongProvider = ({ children }: { children: ReactNode }) => {
               lines: section.lines.map(line => {
                 return {
                   ...line,
-                  chords: line.chords.map(chord => {
-                    return {
-                      ...chord,
-                      name: transposeChord(chord.name, semitones)
-                    };
+                  words: line.words.map(word => {
+                    if (word.chord) {
+                      return {
+                        ...word,
+                        chord: {
+                          ...word.chord,
+                          name: transposeChord(word.chord.name, semitones)
+                        }
+                      };
+                    }
+                    return word;
                   })
                 };
               })
