@@ -22,9 +22,9 @@ const HomePage = () => {
 
   return (
     <AppWrapper>
-      <main className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-80px)] px-4 py-6">
+      <main className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-80px)] -mt-12 px-4 py-6">
         <div className="w-full max-w-md flex flex-col items-center space-y-6">
-          <h1 className="text-notecraft-gold font-script text-5xl font-extrabold tracking-wider leading-tight drop-shadow-sm mb-2 text-center">
+          <h1 className="text-notecraft-gold font-script text-7xl font-extrabold tracking-wider leading-tight drop-shadow-sm mb-2 text-center">
             Notecraft
           </h1>
           <div className="relative w-full mb-2">
@@ -62,7 +62,7 @@ const HomePage = () => {
             to="/folders"
             className="bg-notecraft-brown text-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 w-full mb-6"
           >
-            <div className="p-8 flex flex-col items-center justify-center">
+            <div className="p-12 flex flex-col items-center justify-center">
               <FileMusic className="h-8 w-8 mb-2 opacity-80" />
               <h2 className="text-2xl font-serif">Song Library</h2>
             </div>
@@ -71,7 +71,7 @@ const HomePage = () => {
             onClick={() => setShowFolderDialog(true)}
             className="bg-notecraft-gold text-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 w-full"
           >
-            <div className="p-8 flex flex-col items-center justify-center">
+            <div className="p-12 flex flex-col items-center justify-center">
               <PlusCircle className="h-8 w-8 mb-2 opacity-80" />
               <h2 className="text-2xl font-serif">Create New Song</h2>
             </div>

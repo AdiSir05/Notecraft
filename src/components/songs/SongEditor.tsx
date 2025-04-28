@@ -40,7 +40,8 @@ export const SongEditor = ({ song }: SongEditorProps) => {
           value={editTitle}
           onChange={(e) => setEditTitle(e.target.value)}
           onBlur={handleUpdateTitle}
-          className="text-3xl text-notecraft-gold font-script text-center border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          placeholder="New Song"
+          className="text-4xl text-notecraft-gold font-script text-center border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
         />
         <Input
           value={editArtist}
