@@ -29,7 +29,7 @@ export const Header = ({ title, toggleMenu }: HeaderProps) => {
           </Button>
         </Link>
         {title && (
-          <h1 className="text-notecraft-gold font-script text-3xl font-bold tracking-wide">
+          <h1 className="text-notecraft-gold font-script text-4xl font-extrabold tracking-wider leading-tight drop-shadow-sm">
             {title}
           </h1>
         )}
