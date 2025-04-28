@@ -24,7 +24,7 @@ const HomePage = () => {
     <AppWrapper>
       <main className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-80px)] px-4 py-6">
         <div className="w-full max-w-md flex flex-col items-center space-y-6">
-          <h1 className="text-notecraft-gold font-script text-5xl font-extrabold tracking-wider leading-tight drop-shadow-sm mb-2 text-center">
+          <h1 className="text-notecraft-gold font-script text-7xl font-extrabold tracking-wider leading-tight drop-shadow-sm mb-2 text-center">
             Notecraft
           </h1>
           <div className="relative w-full mb-2">
